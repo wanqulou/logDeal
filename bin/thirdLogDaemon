@@ -1,0 +1,28 @@
+#!/bin/sh
+# REQUIRE: PHP
+
+## env
+export TZ="Asia/Shanghai"
+
+. /etc/rc.subr
+
+name="thirdLogDaemon"
+
+rcvar=`set_rcvar`
+load_rc_config ${name}
+
+basedir="/usr/local/www/smartmad_engine/thirdLogDaemon"
+thirdLogDaemon_enable="YES"
+runner="/usr/bin/php"
+inifile="${basedir}/conf/config.ini"
+debuglevel="1"
+
+command=${runner}
+procname="php"  #freebsd的proctitle模块有这个特性
+pidfile="${basedir}/run/${name}.pid"
+conffile=${inifile}
+
+
+command_args="${basedir}/main.php @c ${conffile} @d ${debuglevel}"
+
+run_rc_command "$1"
